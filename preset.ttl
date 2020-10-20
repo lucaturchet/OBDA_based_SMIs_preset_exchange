@@ -9,3 +9,24 @@
 @prefix studio:				<http://purl.org/ontology/studio/main> .
 @prefix foaf: 				<http://xmlns.com/foaf/0.1/name> .
 @prefix rdf:				<http://www.w3.org/1999/02/22-rdf-syntax-ns> .
+
+mx:SoftwareMixer 		mx:channel     	 					_:stereo_channel .
+_:stereo_channel 		rdf:type 		 					mx:StereoChannel;
+						fx:name 							"main";
+						mx:input							con:AnalogueInput;
+						mx:output							con:AnalogueOutput;
+						device:component 					_:delay_effect .
+_:delay_effect 			rdf:type 							studio:Delay;
+ 						fx:implementation  					_:plugin .
+_:plugin 				rdf:type							fx:PlugIn;
+						smi:plugin_name 					"mdaDelay";
+						fx:PlugInAPI 						"vst2x";
+						fx:has_parameter 					_:feedback_parameter .
+_:feedback_parameter	rdf:type							fx:NumericParameter;
+						fx:name 							"Feedback".
+smi:PressureSensor      sosa:observes 			            "pressure";
+						foaf:name 				            "pressure_0";
+						smi:mapping_function	            _:sensor_to_parameter .
+_:sensor_to_parameter	rdf:type 						    smi:MappingTransform;
+						smi:mapping_function_type 		    "linear" ;
+						smi:maps 						    _:feedback_parameter .
