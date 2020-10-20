@@ -1,10 +1,10 @@
 {
-    "sensor_to_sound_parameter_mapping" : {
-
-        "mapping_1": {
+    "mappings": [
+		{
+		    "mapping_id" : 1,
             "sensor_id" : 1,
             "name_effect" : "mdaDelay",
             "effect_parameter" : "Feedback"
-        }
-    }
+		}
+	]
 }

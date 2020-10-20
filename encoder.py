@@ -5,6 +5,7 @@
 import os, sys
 import json
 import pathlib
+import contextlib
 
 
 CURRENT_DIR     = pathlib.Path(__file__).parent.absolute()
@@ -26,78 +27,122 @@ TTL_PREFIXES = """
 """
 
 
-t_name = ''
-t_mode = ''
-i_engine_bus = ''
-i_track_bus = ''
-o_engine_bus = ''
-o_track_bus = ''
-p_name = ''
-p_type = ''
+
+
+class Encoder:
+
+    def __init__(self, file_location):
+        self.ttl_file_name = file_location
+        self.var_elk_configs = dict()
+
+    def __enter__(self):
+        self.ttl_file = open(self.ttl_file_name, 'w')
+        return self
+
+    def __exit__(self, *args):
+        self.ttl_file.close()
+        
+    def write_on_ttl_file(self, content):
+        self.ttl_file.write(content)
+
+    def load_json_config(self, json_file):
+        with open(json_file) as f:
+            return json.load(f)
+     
+    def parse_SUSHI(self):
+        with open(CONFIG_SUSHI) as f:
+            data = json.load(f)
+
+        for t in data['tracks']:
+            t_name = t['name']
+            t_mode = t['mode']
+        for i in data['tracks'][0]['inputs']:
+            i_engine_bus = i['engine_bus'] 
+            i_track_bus = i['track_bus'] 
+        for o in data['tracks'][0]['outputs']:
+            o_engine_bus = o['engine_bus'] 
+            o_track_bus = o['track_bus']
+        for p in data['tracks'][0]['plugins']:
+            p_name = p['name']
+            p_type = p['type']  
+      
+            dict_SUSHI  =   dict(
+                                t_name = t_name, 
+                                t_mode = t_mode, 
+                                i_engine_bus = i_engine_bus, 
+                                i_track_bus = i_track_bus, 
+                                o_engine_bus = o_engine_bus,
+                                o_track_bus = o_track_bus,
+                                p_name = p_name,
+                                p_type = p_type
+                                )
+            self.var_elk_configs.update(dict_SUSHI)
+
+
+                                
+    
+    def parse_SENSEI(self):
+        with open(CONFIG_SENSEI) as f:
+            data = json.load(f)
+
+            for s in data['sensors']:
+                s_id = s['id']
+                s_name = s['name']
+                s_sensor_type = s['sensor_type']
+
+            dict_SENSEI =   dict(
+                                s_id = s_id,
+                                s_name = s_name,
+                                s_sensor_type = s_sensor_type
+                                )
+            self.var_elk_configs.update(dict_SENSEI)
+
+    
+    def parse_MAPPINGS(self):
+        with open(CONFIG_MAPPINGS) as f:
+            data = json.load(f) 
+
+            for m in data['mappings']:
+                m_mapping_id = m['mapping_id']
+                m_sensor_id = m['sensor_id']
+                m_name_effect = m['name_effect']
+                m_effect_parameter = m['effect_parameter']
+         
+            dict_MAPPINGS = dict(
+                                 m_mapping_id = m_mapping_id,
+                                 m_sensor_id = m_sensor_id,
+                                 m_name_effect = m_name_effect,
+                                 m_effect_parameter = m_effect_parameter
+                                )
+            self.var_elk_configs.update(dict_MAPPINGS)
 
 
 
 
-
-
-
-def print_on_ttl_file(ttl_file, content):
-    ttl_file.write(content)
-
-
-
-def load_json_config(json_file):
-    with open(json_file) as f:
-        return json.load(f)
-
-
-def parse_SUSHI(data):
-    for t in data['tracks']:
-
-        global t_name 
-        global t_mode 
-        global i_engine_bus
-        global i_track_bus
-        global o_engine_bus
-        global o_track_bus
-        global p_name
-        global p_type
-
-        t_name = t['name']
-        t_mode = t['mode']
-    for i in data['tracks'][0]['inputs']:
-        i_engine_bus = i['engine_bus'] 
-        i_track_bus = i['track_bus'] 
-    for o in data['tracks'][0]['outputs']:
-        o_engine_bus = o['engine_bus'] 
-        o_track_bus = o['track_bus']
-    for p in data['tracks'][0]['plugins']:
-        p_name = p['name']
-        p_type = p['type']      
-
-                    
+    def encode(self):
+        e.parse_SUSHI()
+        e.parse_SENSEI()
+        e.parse_MAPPINGS()
+        with e:
+            e.write_on_ttl_file(TTL_PREFIXES)
 
 
 
 
+                        
 if __name__ == '__main__': 
     
-    ttl_file = open(os.path.join(CURRENT_DIR,"preset.ttl"), "w")
-    print_on_ttl_file(ttl_file, TTL_PREFIXES)
+    ttl_file_name = os.path.join(CURRENT_DIR,"preset.ttl")
+    e = Encoder(ttl_file_name)
+    e.encode()
 
-    data_SUSHI = load_json_config(CONFIG_SUSHI)
-    parse_SUSHI(data_SUSHI)
-    print(t_name)
-    print(t_mode)
-    print(i_engine_bus)
-    print(i_track_bus)
-    print(o_engine_bus)
-    print(o_track_bus)
-    print(p_name)
-    print(p_type)
+
+    for k, v in e.var_elk_configs.items():
+        print(k, v)
+
+
+
     # Here call function to write on ttl 
-    # print_on_ttl_file(ttl_file, result of function that takes the parsed variables)
-
-    ttl_file.close()
+    # write_on_ttl_file(ttl_file, result of function that takes the parsed variables)
 
 
