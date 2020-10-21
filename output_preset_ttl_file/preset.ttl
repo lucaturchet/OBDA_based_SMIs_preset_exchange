@@ -1,14 +1,14 @@
  
-@prefix smi:				<http://purl.org/ontology/iomust/smi> .
-@prefix mo:					<http://purl.org/ontology/mo> .
-@prefix sosa:				<http://www.w3.org/ns/sosa> .
+@prefix smi:				<http://purl.org/ontology/iomust/smi/> .
+@prefix mo:					<http://purl.org/ontology/mo/> .
+@prefix sosa:				<http://www.w3.org/ns/sosa/> .
 @prefix mx:					<http://purl.org/ontology/studio/mixer/> .
 @prefix con: 				<http://purl.org/ontology/studio/connectivity/> .
-@prefix device:				<http://purl.org/ontology/studio/device> .
-@prefix fx:					<https://w3id.org/aufx/ontology/1.0> .
-@prefix studio:				<http://purl.org/ontology/studio/main> .
-@prefix foaf: 				<http://xmlns.com/foaf/0.1/name> .
-@prefix rdf:				<http://www.w3.org/1999/02/22-rdf-syntax-ns> .
+@prefix device:				<http://purl.org/ontology/studio/device/> .
+@prefix fx:					<https://w3id.org/aufx/ontology/1.0/> .
+@prefix studio:				<http://purl.org/ontology/studio/main/> .
+@prefix foaf: 				<http://xmlns.com/foaf/0.1/name/> .
+@prefix rdf:				<http://www.w3.org/1999/02/22-rdf-syntax-ns/> .
 
 mx:SoftwareMixer 		mx:channel     	 					_:stereo_channel .
 _:stereo_channel 		rdf:type 		 					mx:StereoChannel;

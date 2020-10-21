@@ -5,7 +5,6 @@
 import os, sys
 import json
 import pathlib
-import contextlib
 
 
 CURRENT_DIR     = pathlib.Path(__file__).parent.absolute()
@@ -14,16 +13,16 @@ CONFIG_SENSEI   = os.path.join(CURRENT_DIR,"config_files_elk/config_sensei_simpl
 CONFIG_MAPPINGS = os.path.join(CURRENT_DIR,"config_files_elk/mappings.json")
 
 TTL_PREFIXES = """ 
-@prefix smi:				<http://purl.org/ontology/iomust/smi> .
-@prefix mo:					<http://purl.org/ontology/mo> .
-@prefix sosa:				<http://www.w3.org/ns/sosa> .
+@prefix smi:				<http://purl.org/ontology/iomust/smi/> .
+@prefix mo:					<http://purl.org/ontology/mo/> .
+@prefix sosa:				<http://www.w3.org/ns/sosa/> .
 @prefix mx:					<http://purl.org/ontology/studio/mixer/> .
 @prefix con: 				<http://purl.org/ontology/studio/connectivity/> .
-@prefix device:				<http://purl.org/ontology/studio/device> .
-@prefix fx:					<https://w3id.org/aufx/ontology/1.0> .
-@prefix studio:				<http://purl.org/ontology/studio/main> .
-@prefix foaf: 				<http://xmlns.com/foaf/0.1/name> .
-@prefix rdf:				<http://www.w3.org/1999/02/22-rdf-syntax-ns> .\r\n
+@prefix device:				<http://purl.org/ontology/studio/device/> .
+@prefix fx:					<https://w3id.org/aufx/ontology/1.0/> .
+@prefix studio:				<http://purl.org/ontology/studio/main/> .
+@prefix foaf: 				<http://xmlns.com/foaf/0.1/name/> .
+@prefix rdf:				<http://www.w3.org/1999/02/22-rdf-syntax-ns/> .\r\n
 """
 
 
@@ -180,29 +179,12 @@ f"						smi:maps 						    _:feedback_parameter .\r\n"
                 #This is the case of mono. Let's ignore it for the moment
                 pass
 
-
-
-
-
-
-
-
-
-
                         
 if __name__ == '__main__': 
     
-    ttl_file_name = os.path.join(CURRENT_DIR,"preset.ttl")
+    ttl_file_name = os.path.join(CURRENT_DIR,"output_preset_ttl_file/preset.ttl")
     e = Encoder(ttl_file_name)
     e.encode()
 
-
-   # for k, v in e.var_elk_configs.items():
-   #    print(k, v)
-
-
-
-    # Here call function to write on ttl 
-    # write_on_ttl_file(ttl_file, result of function that takes the parsed variables)
 
 
